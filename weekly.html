@@ -6,6 +6,12 @@
 <title>KX Media · 週趨勢報告</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+// Fallback if CDN fails
+if(typeof Chart === 'undefined'){
+  document.write('<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"><\/script>');
+}
+</script>
 <style>
 :root{
   --bg:#f8f8f6; --bg2:#f0efec; --bg3:#e8e7e3; --white:#fff;
@@ -228,7 +234,7 @@ footer{border-top:1px solid var(--rule);padding:14px 48px;display:flex;justify-c
   </div>
 
   <div class="sh"><div class="sh-n">04</div><div class="sh-t">AI 分析</div><div class="sh-note">真人原創頻道</div></div>
-  <div class="aiwrap"><div class="aihd"><div class="ailbl">Claude AI</div><div class="aitit">真人原創頻道本週分析</div><div class="aimeta" id="ai-ts-real">—</div></div><div id="ai-real" class="aibody" style="color:rgba(255,255,255,.3);font-style:italic">點擊下方按鈕生成針對真人頻道的 AI 分析報告。</div><div class="aifoot"><button class="aibtn" id="aibtn-real" onclick="runAI('real')">▶ 生成真人頻道分析</button></div></div>
+  <div class="aiwrap"><div class="aihd"><div class="ailbl">Claude AI</div><div class="aitit">真人原創頻道本週分析</div><div class="aimeta" id="ai-ts-real">—</div></div><div id="ai-real" class="aibody" style="color:rgba(255,255,255,.3);font-style:italic">點擊下方按鈕查看本週真人頻道分析報告。</div><div class="aifoot"><button class="aibtn" id="aibtn-real" onclick="runAI('real')">▶ 查看本週真人分析</button></div></div>
 </div>
 
 <!-- ══ AI ══ -->
@@ -271,7 +277,7 @@ footer{border-top:1px solid var(--rule);padding:14px 48px;display:flex;justify-c
   </div>
 
   <div class="sh"><div class="sh-n">04</div><div class="sh-t">AI 分析</div><div class="sh-note">AI 原創頻道</div></div>
-  <div class="aiwrap"><div class="aihd"><div class="ailbl">Claude AI</div><div class="aitit">AI頻道本週分析</div><div class="aimeta" id="ai-ts-ai">—</div></div><div id="ai-ai" class="aibody" style="color:rgba(255,255,255,.3);font-style:italic">點擊下方按鈕生成針對 AI 頻道的分析報告。</div><div class="aifoot"><button class="aibtn" id="aibtn-ai" onclick="runAI('ai')">▶ 生成 AI 頻道分析</button></div></div>
+  <div class="aiwrap"><div class="aihd"><div class="ailbl">Claude AI</div><div class="aitit">AI頻道本週分析</div><div class="aimeta" id="ai-ts-ai">—</div></div><div id="ai-ai" class="aibody" style="color:rgba(255,255,255,.3);font-style:italic">點擊下方按鈕查看本週 AI 頻道分析報告。</div><div class="aifoot"><button class="aibtn" id="aibtn-ai" onclick="runAI('ai')">▶ 查看本週 AI 分析</button></div></div>
 </div>
 
 <!-- ══ 多語種 ══ -->
@@ -314,7 +320,7 @@ footer{border-top:1px solid var(--rule);padding:14px 48px;display:flex;justify-c
   </div>
 
   <div class="sh"><div class="sh-n">04</div><div class="sh-t">AI 分析</div><div class="sh-note">多語種頻道</div></div>
-  <div class="aiwrap"><div class="aihd"><div class="ailbl">Claude AI</div><div class="aitit">多語種頻道本週分析</div><div class="aimeta" id="ai-ts-multi">—</div></div><div id="ai-multi" class="aibody" style="color:rgba(255,255,255,.3);font-style:italic">點擊下方按鈕生成針對多語種頻道的分析報告。</div><div class="aifoot"><button class="aibtn" id="aibtn-multi" onclick="runAI('multi')">▶ 生成多語種頻道分析</button></div></div>
+  <div class="aiwrap"><div class="aihd"><div class="ailbl">Claude AI</div><div class="aitit">多語種頻道本週分析</div><div class="aimeta" id="ai-ts-multi">—</div></div><div id="ai-multi" class="aibody" style="color:rgba(255,255,255,.3);font-style:italic">點擊下方按鈕查看本週多語種頻道分析報告。</div><div class="aifoot"><button class="aibtn" id="aibtn-multi" onclick="runAI('multi')">▶ 查看本週多語種分析</button></div></div>
 </div>
 
 </div>
@@ -407,17 +413,19 @@ function agg(rows,w){
 
 // ── Init ──────────────────────────────────────
 function init(){
-  document.getElementById('gen-time').textContent=new Date().toLocaleString('zh-TW');
-  document.getElementById('cur-range').textContent=WR[curW]+', 2026';
-  document.getElementById('fts').textContent='Generated '+new Date().toLocaleString('zh-TW');
-  renderHeaderKpisForW(4);
-  renderTypeCounts();
-  ['real','ai','multi'].forEach(t=>renderAll(t));
-  renderTables(4);
-  // Set initial AI placeholders
+  try{document.getElementById('gen-time').textContent=new Date().toLocaleString('zh-TW');}catch(e){}
+  try{document.getElementById('cur-range').textContent='May 4–10, 2026';}catch(e){}
+  try{document.getElementById('fts').textContent='Generated '+new Date().toLocaleString('zh-TW');}catch(e){}
+  try{renderHeaderKpisForW(4);}catch(e){console.error('KPI:',e);}
+  try{renderTypeCounts();}catch(e){}
+  try{['real','ai','multi'].forEach(t=>renderAll(t));}catch(e){console.error('renderAll:',e);}
+  try{renderTables(4);}catch(e){console.error('tables:',e);}
   ['real','ai','multi'].forEach(t=>{
-    const body=document.getElementById('ai-'+t);
-    if(body){body.style.cssText='padding:18px;font-size:13px;line-height:1.9;color:rgba(255,255,255,.4);font-style:italic';body.textContent='點擊下方按鈕查看 W5 分析報告。';}
+    try{
+      const body=document.getElementById('ai-'+t);
+      if(body){body.style.cssText='padding:18px;font-size:13px;line-height:1.9;color:rgba(255,255,255,.4);font-style:italic';
+        body.textContent='點擊下方按鈕查看 W5 分析報告。';}
+    }catch(e){}
   });
 }
 
@@ -748,7 +756,7 @@ function renderHeaderKpisForW(wi){
   ].map(k=>`<div class="hk"><div class="hk-l">${k.l}</div><div class="hk-v">${k.v}</div><div class="hk-d ${k.c}">${k.d}</div></div>`).join('');
 }
 
-function setW(w,btn){
+function setW(w,btn){ try {
   curW=w;
   document.querySelectorAll('.wbtn').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
@@ -770,19 +778,20 @@ function setW(w,btn){
     if(body){body.style.cssText='padding:18px;font-size:13px;line-height:1.9;color:rgba(255,255,255,.4);font-style:italic';body.textContent='點擊下方按鈕查看 '+WL[wi]+' 分析報告。';}
     if(ts)ts.textContent='—';
     if(btn2){btn2.style.opacity='1';btn2.textContent='▶ 查看 '+WL[wi]+' 分析';}
-  });
-}
+  });} catch(e){console.error("setW error:",e);} }
 
 function switchType(type,btn){
-  curType=type;
-  document.querySelectorAll('.ttype').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
-  document.querySelectorAll('.tpanel').forEach(p=>p.classList.remove('on'));
-  document.getElementById('panel-'+type).classList.add('on');
-  document.querySelectorAll('.wbtn.on').forEach(b=>{
-    b.style.color=C[type];
-    b.style.borderBottomColor=C[type];
-  });
+  try{
+    curType=type;
+    document.querySelectorAll('.ttype').forEach(b=>b.classList.remove('on'));
+    btn.classList.add('on');
+    document.querySelectorAll('.tpanel').forEach(p=>p.classList.remove('on'));
+    document.getElementById('panel-'+type).classList.add('on');
+    document.querySelectorAll('.wbtn.on').forEach(b=>{
+      b.style.color=C[type];
+      b.style.borderBottomColor=C[type];
+    });
+  }catch(e){console.error('switchType error:',e);}
 }
 
 
@@ -1021,11 +1030,16 @@ const ANALYSES = {
 };
 
 function runAI(type){
-  const wi = curW < 0 ? 3 : curW;
+  const wi = (typeof curW!=='undefined' && curW>=0) ? curW : 4;
   const body = document.getElementById('ai-'+type);
   const ts = document.getElementById('ai-ts-'+type);
   const btn = document.getElementById('aibtn-'+type);
   if(!body) return;
+  if(typeof ANALYSES==='undefined'||!ANALYSES[type]||!ANALYSES[type][wi]){
+    body.style.cssText='padding:18px;font-size:13px;line-height:1.9;color:rgba(255,255,255,.5)';
+    body.textContent='分析載入中，請稍候再試。';
+    return;
+  }
   body.style.cssText = 'padding:18px;font-size:13px;line-height:1.9;color:rgba(255,255,255,.82);white-space:pre-wrap';
   body.textContent = ANALYSES[type][wi];
   if(ts) ts.textContent = WR[wi] + ' · Claude Sonnet 分析';
@@ -1034,10 +1048,14 @@ function runAI(type){
 
 
 // ── Boot ──────────────────────────────────────
-Chart.defaults.color='#6e6e60';
-Chart.defaults.borderColor='#e8e7e3';
-Chart.defaults.font.family="'Noto Sans TC',sans-serif";
-init();
+document.addEventListener('DOMContentLoaded', function(){
+  if(typeof Chart !== 'undefined'){
+    Chart.defaults.color='#6e6e60';
+    Chart.defaults.borderColor='#e8e7e3';
+    Chart.defaults.font.family="'Noto Sans TC',sans-serif";
+  }
+  init();
+});
 </script>
 </body>
 </html>
