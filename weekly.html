@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KX Media · 週趨勢報告</title>
+<title>KX Media · 四週趨勢報告</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
@@ -171,7 +171,7 @@ footer{border-top:1px solid var(--rule);padding:14px 48px;display:flex;justify-c
       <div class="title">頻道週報</div>
     <div style="font-size:11px;color:var(--ink3);margin-top:4px;font-family:var(--mono)">42 個頻道 · 真人原創 27 · AI 15 · 多語種 10 · 選週查看本週數據及與上週對比</div>
     </div>
-    <div class="meta">報告期間：<span id="cur-range">May 4–10, 2026</span><br>分類：真人原創 · AI原創 · 多語種<br>生成：<span id="gen-time"></span></div>
+    <div class="meta">報告期間：<span id="cur-range">五月第一週 5/4-10, 2026</span><br>分類：真人原創 · AI原創 · 多語種<br>生成：<span id="gen-time"></span></div>
   </div>
   <div class="header-kpis" id="hdr-kpis"></div>
 </div>
@@ -185,11 +185,11 @@ footer{border-top:1px solid var(--rule);padding:14px 48px;display:flex;justify-c
 
 <!-- Week Nav -->
 <div class="week-nav" id="week-nav">
-  <button class="wbtn" onclick="setW(0,this)">W1 <span class="wr">Apr 6–12</span></button>
-  <button class="wbtn" onclick="setW(1,this)">W2 <span class="wr">Apr 13–19</span></button>
-  <button class="wbtn" onclick="setW(2,this)">W3 <span class="wr">Apr 20–26</span></button>
-  <button class="wbtn" onclick="setW(3,this)">W4 <span class="wr">Apr 27–May 3</span></button>
-  <button class="wbtn on" onclick="setW(4,this)">W5 <span class="wr">May 4–10 ← 最新</span></button>
+  <button class="wbtn" onclick="setW(0,this)">四月W1 <span class="wr">4/6–12</span></button>
+  <button class="wbtn" onclick="setW(1,this)">四月W2 <span class="wr">4/13–19</span></button>
+  <button class="wbtn" onclick="setW(2,this)">四月W3 <span class="wr">4/20–26</span></button>
+  <button class="wbtn" onclick="setW(3,this)">四月W4 <span class="wr">4/27–5/3</span></button>
+  <button class="wbtn on" onclick="setW(4,this)">五月W1 <span class="wr">5/4–10 ← 最新</span></button>
 </div>
 
 <div class="page">
@@ -325,7 +325,7 @@ footer{border-top:1px solid var(--rule);padding:14px 48px;display:flex;justify-c
 
 </div>
 <footer>
-  <span>KX Media · 頻道週報 · Apr 6 – May 3, 2026 · 僅供內部使用</span>
+  <span>KX Media · 頻道週報 · 四月第一週 ~ 五月第一週 · 僅供內部使用</span>
   <span id="fts"></span>
 </footer>
 
@@ -389,8 +389,8 @@ const D=[
 ['Insight with Jingyuan','multi','English','唐靖遠',2337,24.88,14,6,2980,32.59,12,10,2483,35.15,11,9,2221,57.6,5,2,1247,49.25,13,14]
 ];
 
-const WL = ['W1','W2','W3','W4','W5'];
-const WR = ['Apr 6–12','Apr 13–19','Apr 20–26','Apr 27–May 3','May 4–10'];
+const WL = ['四月W1','四月W2','四月W3','四月W4','五月W1'];
+const WR = ['四月第一週 4/6-12','四月第二週 4/13-19','四月第三週 4/20-26','四月第四週 4/27-5/3','五月第一週 5/4-10'];
 const C = {real:'#2d6a48', ai:'#2a5298', multi:'#c47a00'};
 const PALE = {real:['#2d6a48','#3d8a5a','#4da870','#70c090','#90d8a8','#b0e8c0','#d0f0d8','#e8f8ef'],
               ai:  ['#2a5298','#3a62a8','#5080c0','#7098d0','#90b8e0','#b0d0f0','#d0e4f8','#e8f2fc'],
@@ -414,7 +414,7 @@ function agg(rows,w){
 // ── Init ──────────────────────────────────────
 function init(){
   try{document.getElementById('gen-time').textContent=new Date().toLocaleString('zh-TW');}catch(e){}
-  try{document.getElementById('cur-range').textContent='May 4–10, 2026';}catch(e){}
+  try{document.getElementById('cur-range').textContent='五月第一週 5/4-10, 2026';}catch(e){}
   try{document.getElementById('fts').textContent='Generated '+new Date().toLocaleString('zh-TW');}catch(e){}
   try{renderHeaderKpisForW(4);}catch(e){console.error('KPI:',e);}
   try{renderTypeCounts();}catch(e){}
@@ -424,7 +424,7 @@ function init(){
     try{
       const body=document.getElementById('ai-'+t);
       if(body){body.style.cssText='padding:18px;font-size:13px;line-height:1.9;color:rgba(255,255,255,.4);font-style:italic';
-        body.textContent='點擊下方按鈕查看 W5 分析報告。';}
+        body.textContent='點擊下方按鈕查看五月W1分析報告。';}
     }catch(e){}
   });
 }
@@ -466,7 +466,7 @@ function renderTypeCounts(){
 
 function renderAll(type){
   const rows=seg(type);
-  const aggs=[0,1,2,3].map(w=>agg(rows,w));
+  const aggs=[0,1,2,3,4].map(w=>agg(rows,w));
   const color=C[type];
   const BLUE='#2196f3'; // 參考網站天藍色
 
@@ -760,7 +760,6 @@ function setW(w,btn){ try {
   curW=w;
   document.querySelectorAll('.wbtn').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
-  const wi=w<0?3:w;
   const wi=w<0?4:w;
   const wLabel=w>=0?`${WR[w]}, 2026`:'W1–W5 合計';
   const rangeEl=document.getElementById('cur-range');
@@ -1042,7 +1041,7 @@ function runAI(type){
   }
   body.style.cssText = 'padding:18px;font-size:13px;line-height:1.9;color:rgba(255,255,255,.82);white-space:pre-wrap';
   body.textContent = ANALYSES[type][wi];
-  if(ts) ts.textContent = WR[wi] + ' · Claude Sonnet 分析';
+  if(ts) ts.textContent = WL[wi] + '（' + WR[wi] + '）· Claude Sonnet 分析';
   if(btn){ btn.textContent = '▶ 重新查看'; btn.style.opacity='.7'; }
 }
 
