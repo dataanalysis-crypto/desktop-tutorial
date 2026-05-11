@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KX Media · 四週趨勢報告</title>
+<title>KX Media · 週趨勢報告</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
@@ -165,7 +165,7 @@ footer{border-top:1px solid var(--rule);padding:14px 48px;display:flex;justify-c
       <div class="title">頻道週報</div>
     <div style="font-size:11px;color:var(--ink3);margin-top:4px;font-family:var(--mono)">42 個頻道 · 真人原創 27 · AI 15 · 多語種 10 · 選週查看本週數據及與上週對比</div>
     </div>
-    <div class="meta">報告期間：Apr 6 – May 3, 2026<br>分類：真人原創 · AI原創 · 多語種<br>生成：<span id="gen-time"></span></div>
+    <div class="meta">報告期間：<span id="cur-range">May 4–10, 2026</span><br>分類：真人原創 · AI原創 · 多語種<br>生成：<span id="gen-time"></span></div>
   </div>
   <div class="header-kpis" id="hdr-kpis"></div>
 </div>
@@ -182,7 +182,8 @@ footer{border-top:1px solid var(--rule);padding:14px 48px;display:flex;justify-c
   <button class="wbtn" onclick="setW(0,this)">W1 <span class="wr">Apr 6–12</span></button>
   <button class="wbtn" onclick="setW(1,this)">W2 <span class="wr">Apr 13–19</span></button>
   <button class="wbtn" onclick="setW(2,this)">W3 <span class="wr">Apr 20–26</span></button>
-  <button class="wbtn on" onclick="setW(3,this)">W4 <span class="wr">Apr 27–May 3 ← 最新</span></button>
+  <button class="wbtn" onclick="setW(3,this)">W4 <span class="wr">Apr 27–May 3</span></button>
+  <button class="wbtn on" onclick="setW(4,this)">W5 <span class="wr">May 4–10 ← 最新</span></button>
 </div>
 
 <div class="page">
@@ -407,6 +408,7 @@ function agg(rows,w){
 // ── Init ──────────────────────────────────────
 function init(){
   document.getElementById('gen-time').textContent=new Date().toLocaleString('zh-TW');
+  document.getElementById('cur-range').textContent=WR[curW]+', 2026';
   document.getElementById('fts').textContent='Generated '+new Date().toLocaleString('zh-TW');
   renderHeaderKpisForW(4);
   renderTypeCounts();
@@ -751,7 +753,10 @@ function setW(w,btn){
   document.querySelectorAll('.wbtn').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
   const wi=w<0?3:w;
-  const wLabel=w>=0?`${WR[w]}, 2026`:'四週合計';
+  const wi=w<0?4:w;
+  const wLabel=w>=0?`${WR[w]}, 2026`:'W1–W5 合計';
+  const rangeEl=document.getElementById('cur-range');
+  if(rangeEl)rangeEl.textContent=wLabel;
   document.querySelector('.meta').innerHTML=`報告期間：${wLabel}<br>分類：真人原創 · AI · 多語種<br>生成：<span id="gen-time">${new Date().toLocaleString('zh-TW')}</span>`;
   renderHeaderKpisForW(wi);
   ['real','ai','multi'].forEach(t=>renderAll(t));
