@@ -152,6 +152,9 @@ body{background:var(--bg);color:var(--ink);font-family:var(--head);font-size:13p
 .tpanel[data-t=real]  {--acnt:var(--real2);  --h-bg:var(--real4);  --h-border:var(--real3);  --h-accent:var(--real2)}
 .tpanel[data-t=ai]    {--acnt:var(--ai2);    --h-bg:var(--ai4);    --h-border:var(--ai3);    --h-accent:var(--ai2)}
 .tpanel[data-t=multi] {--acnt:var(--multi2); --h-bg:var(--multi4); --h-border:var(--multi3); --h-accent:var(--multi2)}
+.tpanel[data-t=ainew]{--acnt:#8a5a00;--h-bg:#fdf5e8;--h-border:#f0d0a0;--h-accent:#8a5a00}
+.ttype[data-t=ainew]{--t-color:#8a5a00}
+.ttype[data-t=ainew] .tcnt{--t-bg:#faebd0}
 
 footer{border-top:1px solid var(--rule);padding:14px 48px;display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--ink4)}
 /* ── LOOKER ── */
@@ -169,7 +172,7 @@ footer{border-top:1px solid var(--rule);padding:14px 48px;display:flex;justify-c
     <div>
       <div class="brand">KX Media · 內部數據報告</div>
       <div class="title">頻道週報</div>
-    <div style="font-size:11px;color:var(--ink3);margin-top:4px;font-family:var(--mono)">42 個頻道 · 真人原創 27 · AI 15 · 多語種 10 · 選週查看本週數據及與上週對比</div>
+    <div style="font-size:11px;color:var(--ink3);margin-top:4px;font-family:var(--mono)">47 個頻道 · 真人原創 27 · AI原創 15 · 多語種 10 · AI新頻道 5 · 選週查看本週數據及與上週對比</div>
     </div>
     <div class="meta">報告期間：<span id="cur-range">五月第一週 5/4-10, 2026</span><br>分類：真人原創 · AI原創 · 多語種<br>生成：<span id="gen-time"></span></div>
   </div>
@@ -181,6 +184,7 @@ footer{border-top:1px solid var(--rule);padding:14px 48px;display:flex;justify-c
   <button class="ttype on" data-t="real"  onclick="switchType('real',this)">真人原創 <span class="tcnt" id="cnt-real">—</span></button>
   <button class="ttype"    data-t="ai"    onclick="switchType('ai',this)">AI原創 <span class="tcnt" id="cnt-ai">—</span></button>
   <button class="ttype"    data-t="multi" onclick="switchType('multi',this)">多語種 <span class="tcnt" id="cnt-multi">—</span></button>
+  <button class="ttype"    data-t="ainew" onclick="switchType('ainew',this)">AI新頻道 <span class="tcnt" id="cnt-ainew">—</span></button>
 </nav>
 
 <!-- Week Nav -->
@@ -326,8 +330,40 @@ footer{border-top:1px solid var(--rule);padding:14px 48px;display:flex;justify-c
 </div>
 
 </div>
+<!-- ══ AI新頻道 ══ -->
+<div class="tpanel" data-t="ainew" id="panel-ainew">
+  <div class="hero">
+    <div class="ailbl" style="background:#8a5a00">AI新頻道</div>
+    <div class="hero-desc">AI 實驗性新頻道 · 早期增長監測 · 5 個頻道</div>
+    <div class="hero-kpis" id="hs-ainew"></div>
+  </div>
+  <div class="kgrid" id="kpi-ainew"></div>
+
+  <div class="sh"><div class="sh-n">01</div><div class="sh-t">趨勢圖表</div><div class="sh-note">本週高亮 · 曲線=趨勢</div></div>
+  <div class="two-col" style="margin-bottom:14px">
+    <div class="panel"><div class="ph"><div class="pt">觀看量趨勢</div><div class="ps">曲線 · 選定週高亮</div></div><div class="pb"><canvas id="v-ainew" height="160"></canvas></div></div>
+    <div class="panel"><div class="ph"><div class="pt">淨訂閱趨勢</div><div class="ps">曲線 · 正負顏色區分</div></div><div class="pb"><canvas id="s-ainew" height="160"></canvas></div></div>
+  </div>
+  <div class="panel" style="margin-bottom:14px">
+    <div class="ph"><div class="pt">本週觀看量排行</div><div class="ps" id="ld-ainew-sub">所有頻道</div></div>
+    <div class="pb"><canvas id="lang-ainew"></canvas></div>
+  </div>
+  <div class="two-col">
+    <div class="panel"><div class="ph"><div class="pt">本週 vs 上週 觀看率</div><div class="ps" id="rr-ainew-sub">雙柱對比</div></div><div class="pb"><canvas id="rate-ainew" height="200"></canvas></div></div>
+    <div class="panel"><div class="ph"><div class="pt">本週 vs 上週 淨訂閱</div><div class="ps" id="tv-ainew-sub">橫向柱狀</div></div><div class="pb"><canvas id="top-ainew" height="200"></canvas></div></div>
+  </div>
+
+  <div class="sh"><div class="sh-n">02</div><div class="sh-t">頻道排名</div><div class="sh-note" id="tbl-note-ainew">按觀看量排序</div></div>
+  <div class="panel" style="margin-bottom:4px">
+    <div class="tw"><table class="dt"><thead><tr><th style="width:52px">#</th><th>頻道名稱</th><th class="r">觀看數</th><th class="r">vs 上週</th><th class="r">觀看率</th><th class="r">佔比</th><th class="r">新訂閱</th><th class="r">失訂</th></tr></thead><tbody id="tbl-ainew"></tbody></table></div>
+  </div>
+
+  <div class="sh"><div class="sh-n">03</div><div class="sh-t">AI 分析</div><div class="sh-note">AI新頻道</div></div>
+  <div class="aiwrap"><div class="aihd"><div class="ailbl">Claude AI</div><div class="aitit">AI新頻道本週分析</div><div class="aimeta" id="ai-ts-ainew">—</div></div><div id="ai-ainew" class="aibody" style="color:rgba(255,255,255,.4);font-style:italic">點擊下方按鈕查看本週 AI 新頻道分析報告。</div><div class="aifoot"><button class="aibtn" id="aibtn-ainew" onclick="runAI('ainew')">▶ 查看 AI 新頻道分析</button></div></div>
+</div>
+
 <footer>
-  <span>KX Media · 頻道週報 · 四月第一週 ~ 五月第一週 · 僅供內部使用</span>
+  <span>KX Media · 頻道週報 · 四月第一週 ~ 五月第三週 · 僅供內部使用</span>
   <span id="fts"></span>
 </footer>
 
@@ -389,11 +425,17 @@ const D=[
 ['The Wei & Cathy Show','multi','English','方偉/辛恬',9554,15.24,20,37,13153,14.34,57,48,8555,20.77,21,39,22346,50.52,42,74,8086,26.43,30,51,6958,22.48,12,33,5802,27.93,12,12],
 ['Fang Fei Time','multi','English','方菲',2263,16.62,7,0,3012,9.84,60,14,3411,12.24,70,9,4089,15.97,46,8,5266,18.57,27,4,412,12.17,3,3,772,11.15,9,2],
 ['Insight with Jingyuan','multi','English','唐靖遠',2337,24.88,14,6,2980,32.59,12,10,2483,35.15,11,9,2221,57.6,5,2,1281,48.29,12,13,638,22.2,6,5,369,22.38,2,1]
+,
+['隱密地球','ainew','Mandarin','—',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3639,83.33,10,0,15507,88.6,25,3],
+['光年之外','ainew','Mandarin','—',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,414,33.43,3,0,296,35.2,3,0],
+['他的傳記','ainew','Mandarin','—',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,137,28.14,5,3,69,33.8,2,0],
+['深夜心理學 MindNight','ainew','Mandarin','—',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,49,38.29,0,0,39,30.6,1,0],
+['性格說明書','ainew','Mandarin','—',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,23.33,0,0,12,38.5,0,0]
 ];
 
 const WL = ['四月W1','四月W2','四月W3','四月W4','五月W1','五月W2','五月W3'];
 const WR = ['四月第一週 4/6-12','四月第二週 4/13-19','四月第三週 4/20-26','四月第四週 4/27-5/3','五月第一週 5/4-10','五月第二週 5/11-17','五月第三週 5/18-22（截至週五）'];
-const C = {real:'#2d6a48', ai:'#2a5298', multi:'#c47a00'};
+const C = {real:'#2d6a48', ai:'#2a5298', multi:'#c47a00', ainew:'#8a5a00'};
 const PALE = {real:['#2d6a48','#3d8a5a','#4da870','#70c090','#90d8a8','#b0e8c0','#d0f0d8','#e8f8ef'],
               ai:  ['#2a5298','#3a62a8','#5080c0','#7098d0','#90b8e0','#b0d0f0','#d0e4f8','#e8f2fc'],
               multi:['#a06000','#c47a00','#d89020','#e8a840','#f0bf60','#f8d080','#fce0a0','#feeec8']};
@@ -420,9 +462,9 @@ function init(){
   try{document.getElementById('fts').textContent='Generated '+new Date().toLocaleString('zh-TW');}catch(e){}
   try{renderHeaderKpisForW(6);}catch(e){console.error('KPI:',e);}
   try{renderTypeCounts();}catch(e){}
-  try{['real','ai','multi'].forEach(t=>renderAll(t));}catch(e){console.error('renderAll:',e);}
+  try{['real','ai','multi','ainew'].forEach(t=>renderAll(t));}catch(e){console.error('renderAll:',e);}
   try{renderTables(6);}catch(e){console.error('tables:',e);}
-  ['real','ai','multi'].forEach(t=>{
+  ['real','ai','multi','ainew'].forEach(t=>{
     try{
       const body=document.getElementById('ai-'+t);
       if(body){body.style.cssText='padding:18px;font-size:13px;line-height:1.9;color:rgba(255,255,255,.4);font-style:italic';
@@ -459,7 +501,7 @@ function renderHeaderKpis(){
 }
 
 function renderTypeCounts(){
-  ['real','ai','multi'].forEach(t=>{
+  ['real','ai','multi','ainew'].forEach(t=>{
     const rows=seg(t);
     const total=[0,1,2,3].reduce((s,w)=>s+rows.filter(r=>wk(r,w).v>0).length,0);
     document.getElementById('cnt-'+t).textContent=rows.length+'個頻道';
@@ -675,7 +717,7 @@ function renderWeekCharts(type, wi, pw){
 function renderTables(w){
   const wi=w===undefined?curW:(w<0?3:w);
   const pw=wi>0?wi-1:null;
-  ['real','ai','multi'].forEach(type=>{
+  ['real','ai','multi','ainew'].forEach(type=>{
     const rows=seg(type);
     // Sort by this week views
     const sorted=rows.map(r=>{
@@ -753,7 +795,7 @@ function renderHeaderKpisForW(wi){
     {l:'本週總觀看（42頻道）',v:fmt(totV),d:dv!==null?(dv>=0?'▲':'▼')+Math.abs(dv)+'% vs 上週':'首週',c:dv===null?'neu':dv>=0?'pos':'neg'},
     {l:'上週總觀看',v:prevV?fmt(prevV):'—',d:pwi!==null?WR[pwi]:'—',c:'neu'},
     {l:'本週淨訂閱',v:(net>=0?'+':'')+fmt(Math.abs(net)),d:`+${fmt(totSg)} gained`,c:net>=0?'pos':'neg'},
-    {l:'活躍頻道',v:active+'個',d:`真人${seg('real').filter(r=>wk(r,wi).v>0).length} · AI${seg('ai').filter(r=>wk(r,wi).v>0).length} · 多語${seg('multi').filter(r=>wk(r,wi).v>0).length}`,c:'neu'},
+    {l:'活躍頻道',v:active+'個',d:`真人${seg('real').filter(r=>wk(r,wi).v>0).length} · AI${seg('ai').filter(r=>wk(r,wi).v>0).length} · 多語${seg('multi').filter(r=>wk(r,wi).v>0).length} · 新${seg('ainew').filter(r=>wk(r,wi).v>0).length}`,c:'neu'},
     {l:'平均觀看率',v:avgR+'%',d:'全頻道均值',c:'neu'},
   ].map(k=>`<div class="hk"><div class="hk-l">${k.l}</div><div class="hk-v">${k.v}</div><div class="hk-d ${k.c}">${k.d}</div></div>`).join('');
 }
@@ -768,9 +810,9 @@ function setW(w,btn){ try {
   if(rangeEl)rangeEl.textContent=wLabel;
   document.querySelector('.meta').innerHTML=`報告期間：${wLabel}<br>分類：真人原創 · AI · 多語種<br>生成：<span id="gen-time">${new Date().toLocaleString('zh-TW')}</span>`;
   renderHeaderKpisForW(wi);
-  ['real','ai','multi'].forEach(t=>renderAll(t));
+  ['real','ai','multi','ainew'].forEach(t=>renderAll(t));
   renderTables(w);
-  ['real','ai','multi'].forEach(t=>{
+  ['real','ai','multi','ainew'].forEach(t=>{
     const el=document.getElementById('tbl-note-'+t);
     if(el)el.textContent=WL[wi]+(wi>0?' vs '+WL[wi-1]+' · 按觀看量':'· 首週');
     const body=document.getElementById('ai-'+t);
@@ -789,8 +831,9 @@ function switchType(type,btn){
     document.querySelectorAll('.tpanel').forEach(p=>p.classList.remove('on'));
     document.getElementById('panel-'+type).classList.add('on');
     document.querySelectorAll('.wbtn.on').forEach(b=>{
-      b.style.color=C[type];
-      b.style.borderBottomColor=C[type];
+      const clr = C[type] || '#8a5a00';
+      b.style.color=clr;
+      b.style.borderBottomColor=clr;
     });
   }catch(e){console.error('switchType error:',e);}
 }
@@ -1171,6 +1214,38 @@ const ANALYSES = {
 • 方菲時間粵語版本週大幅增長，建議繼續加大發布頻率，鞏固增長勢頭。
 • 粵語頻道整體健康，建議下週優先確保各粵語頻道維持穩定發布頻率。`,
   },
+  'ainew': {
+    5: `【本週表現 — 五月W2（5/11-17）】
+本週 AI 新頻道合計觀看量約 4.2K，5 個頻道均處於早期冷啟動階段。隱密地球以 3.6K 觀看量、83.3% 超高觀看率領跑，顯示內容品質極高但推送量有限。其他四個頻道觀看量均在百位數以下，仍在算法冷啟動期。
+
+【亮點頻道】
+• 隱密地球 3.6K 觀看，觀看率 83.3%，是本週 AI 新頻道絕對冠軍，超高觀看率顯示內容極具吸引力，只待算法放量推送。
+• 光年之外 414 觀看，觀看率 33.4%，每天穩定有新觀看，增長軌跡健康。
+• 深夜心理學 MindNight 49 觀看，觀看率 38.3%，雖體量極小但留存率良好。
+
+【需要關注】
+• 性格說明書 本週僅 4 觀看，幾乎無流量，需確認內容發布頻率及題材方向。
+• 所有新頻道均在冷啟動期，建議重點關注隱密地球，其高觀看率具備算法爆發的潛力。
+
+【下週建議】
+• 隱密地球建議加快發布頻率，趁高觀看率給算法更多數據，有望觸發推薦加速。
+• 其他頻道建議確保每週至少發布 3 條，保持賬號活躍度以維持算法推薦。`,
+    6: `【本週表現 — 五月W3（5/18-22，截至週五）】
+本週 AI 新頻道合計觀看量 15.9K，較五月W2 的 4.2K 大幅增長 278%，主要由隱密地球爆發帶動（15.5K）。隱密地球觀看率更提升至 88.6%，顯示算法開始推送，是本週最重大的突破信號。
+
+【亮點頻道】
+• 隱密地球 15.5K 觀看，觀看率 88.6%，較五月W2 的 3.6K 增長 330%，是本週最大亮點！算法推薦開始放量，淨訂閱 +22，建議立即加大發布頻率趁勢擴大。
+• 光年之外 296 觀看，觀看率 35.2%，穩定增長，淨訂閱 +3，軌跡健康。
+• 深夜心理學 MindNight 39 觀看，5/19 單日出現 21 觀看的小高峰，顯示有潛力但需更多內容測試。
+
+【需要關注】
+• 性格說明書 本週僅 12 觀看，增長極慢，建議重新評估內容策略和發布頻率。
+• 他的傳記 69 觀看，觀看率 33.8%，基本面尚可，但需加大發布量。
+
+【下週建議】
+• 隱密地球已觸發算法推薦，這是關鍵窗口期，建議本週發布 5 條以上，抓住算法放量機會。
+• 光年之外和深夜心理學建議增加發布頻率至每週 5 條，測試能否進入算法推薦池。`,
+  }
 };
 
 
